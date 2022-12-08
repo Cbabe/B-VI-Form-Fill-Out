@@ -90,23 +90,26 @@ def find_text(gray_image):
     # filter out weak confidence text localizations
         location_x = None
         location_y = None
-        if conf > 10:
-            # display the confidence and text to our terminal
-            #print("Confidence: {}".format(conf))
-            #print("Text: {}".format(text))
-            # print("")
-            # strip out non-ASCII text so we can draw the text on the image
-            # using OpenCV, then draw a bounding box around the text along
-            # with the text itself
-            text = "".join([c if ord(c) < 128 else "" for c in text]).strip()
-            cv2.rectangle(processed_img, (x, y),
-                          (x + w, y + h), 255, 2)
-            cv2.putText(processed_img, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX,
-                        1.2, 255, 3)
-            location_x = round(x+w)
-            location_y = round(y)
-            cv2.circle(processed_img, (location_x, location_y), radius=10,
-                       color=255, thickness=-1)
+        if conf > 70:
+            if ('S' in text) or ('s' in text) or ('i' in text) or ('g' in text) or ('n' in text):
+                print("Found text")
+                # display the confidence and text to our terminal
+                #print("Confidence: {}".format(conf))
+                #print("Text: {}".format(text))
+                # print("")
+                # strip out non-ASCII text so we can draw the text on the image
+                # using OpenCV, then draw a bounding box around the text along
+                # with the text itself
+                text = "".join(
+                    [c if ord(c) < 128 else "" for c in text]).strip()
+                cv2.rectangle(processed_img, (x, y),
+                              (x + w, y + h), 255, 2)
+                cv2.putText(processed_img, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX,
+                            1.2, 255, 3)
+                location_x = round(x+w)
+                location_y = round(y)
+                cv2.circle(processed_img, (location_x, location_y), radius=10,
+                           color=255, thickness=-1)
 
     # show the output image
 
