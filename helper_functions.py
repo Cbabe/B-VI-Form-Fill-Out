@@ -75,7 +75,6 @@ def find_text(gray_image):
     processed_img = cv2.dilate(processed_img, kernel, iterations=1)
     results = pytesseract.image_to_data(processed_img, output_type=Output.DICT)
     # loop over each of the individual text localizations
-    location = None
     for i in range(0, len(results["text"])):
         # extract the bounding box coordinates of the text region from
         # the current result
@@ -94,8 +93,6 @@ def find_text(gray_image):
             if ('S' in text) or ('s' in text) or ('i' in text) or ('g' in text) or ('n' in text):
                 print("Found text")
                 # display the confidence and text to our terminal
-                #print("Confidence: {}".format(conf))
-                #print("Text: {}".format(text))
                 # print("")
                 # strip out non-ASCII text so we can draw the text on the image
                 # using OpenCV, then draw a bounding box around the text along
@@ -106,13 +103,13 @@ def find_text(gray_image):
                               (x + w, y + h), 255, 2)
                 cv2.putText(processed_img, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX,
                             1.2, 255, 3)
+                # finds top right of the text box
                 location_x = round(x+w)
                 location_y = round(y)
                 cv2.circle(processed_img, (location_x, location_y), radius=10,
                            color=255, thickness=-1)
 
     # show the output image
-
     cv2.imshow("Image", processed_img)
    # Applying image_to_string method
     return [location_x, location_y]
